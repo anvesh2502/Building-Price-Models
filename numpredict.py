@@ -1,5 +1,6 @@
 from random import random,randint
 import math
+import numpy as np
 
 def wineprice(rating,age) :
 
@@ -67,3 +68,18 @@ def knnestimate(data,vec1,k=3) :
         avg+=data[idx]['result']
     avg=avg/k
     return avg
+
+
+def inverseweight(dist,num=1.0,const=0.1) :
+    return num/(dist+const)
+
+def subtractweight(dist,const=1.0) :
+
+    if dist>const :
+        return 0
+    else :
+        return const-dist
+
+
+def gaussian(dist,sigma=3.0):
+  return math.e**(-dist**2/(2*sigma**2))
