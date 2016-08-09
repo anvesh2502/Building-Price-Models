@@ -1,6 +1,7 @@
 from random import random,randint
 import math
 import numpy as np
+from pylab import *
 
 def wineprice(rating,age) :
 
@@ -186,3 +187,30 @@ def probguess(data,vec1,low,high,k=5,weightf=gaussian) :
     # The probability is the weights in the range
     # divided by all the weights
     return nweight/tweight
+
+def cumulativegraph(data,vec1,high,k=5,weightf=gaussian) :
+    t1=arange(0.0,high,0.1)
+    cprob=array([probguess(data,vec1,0,v,k,weightf) for v in t1])
+    plot(t1,cprob)
+    show()
+
+def probabilitygraph(data,vec1,high,k=5,weightf=gaussian,ss=5.0) :
+    # Make a range for the prices
+    t1=arange(0.0,high,0.1)
+
+    # Get the probabilitis for the entire range
+    probs=[probguess(data,vec1,v,v+0.1,k,weightf) for v in t1]
+
+    # Smooth them by adding the gaussian of the nearby probabilities
+    smoothed=[]
+    for i in range(len(probs)) :
+        sv=0.0
+        for j in range(0,len(probs)) :
+            dist=abs(i-j)*0.1
+            weight=gaussian(dist,sigma=ss)
+            sv+=weight*probs[j]
+        smoothed.append(sv)
+    smoothed=array(smoothed)
+
+    plot(t1,smoothed)
+    show()
